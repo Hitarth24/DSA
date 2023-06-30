@@ -1,0 +1,32 @@
+int segtree[600001];
+      int n;
+//1
+void build(vector<int>&nums, int left,int right,int ind){
+    if(left == right) {segtree[ind] = nums[left]; return;}
+
+      int mid = (left + right)/2;
+      build(nums,left,mid,2*ind +1);
+      build(nums,mid+1,right,2*ind+2);
+segtree[ind] = segtree[2*ind+1] + segtree[2*ind+2];
+}
+
+//2
+int query(int ind,int mini,int maxi,int left,int right){
+if(mini > right || maxi < left) return 0;
+if(mini >= left  && maxi <= right) return segtree[ind];
+else{
+    int mid = (mini +maxi)/2;
+    int lans = query(2*ind+1,mini,mid,left,right);
+    int rans = query(2*ind+2,mid+1,maxi,left,right);
+    return lans + rans;
+}
+}
+//3
+void updateM(int ind,int left,int right,int index,int val){
+if(left == right){segtree[ind] = val; return;}
+
+    int mid = (left + right)/2;
+if(index <= mid) updateM(2*ind+1,left,mid,index,val);
+else updateM(2*ind+2,mid+1,right,index,val);
+segtree[ind] = segtree[2*ind+1] + segtree[2*ind+2];
+}
